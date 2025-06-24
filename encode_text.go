@@ -229,9 +229,7 @@ func (e *encodeText) writeSpace(buf *buffer) {
 }
 
 func (e *encodeText) writeString(buf *buffer, s string) {
-	buf.WriteByte('"')
-	buf.WriteString(s)
-	buf.WriteByte('"')
+	*buf = strconv.AppendQuote(*buf, s)
 }
 
 func (e *encodeText) writeBool(buf *buffer, b bool) {
