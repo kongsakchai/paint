@@ -1,3 +1,3 @@
-module github.com/kongsakchai/slogja
+module github.com/kongsakchai/paint
 
 go 1.24.0

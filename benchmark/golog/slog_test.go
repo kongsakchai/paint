@@ -6,7 +6,7 @@ import (
 	"io"
 	"log/slog"
 
-	"github.com/kongsakchai/slogja"
+	"github.com/kongsakchai/paint"
 )
 
 func slogAttrs() []slog.Attr {
@@ -82,13 +82,13 @@ func (b *slogBench) logDisabledCtxWeak(msg string) {
 }
 
 func newCutomSlogText(w io.Writer) *slog.Logger {
-	return slog.New(slogja.NewTextHandler(w, &slogja.HandlerOptions{
+	return slog.New(paint.NewTextHandler(w, &paint.HandlerOptions{
 		Level: slog.LevelInfo,
 	}))
 }
 
 func newCutomSlogTextWithCtx(w io.Writer, attr []slog.Attr) *slog.Logger {
-	return slog.New(slogja.NewTextHandler(w, &slogja.HandlerOptions{
+	return slog.New(paint.NewTextHandler(w, &paint.HandlerOptions{
 		Level: slog.LevelInfo,
 	}).WithAttrs(attr))
 }

@@ -4,7 +4,7 @@ import (
 	"io"
 	"log/slog"
 
-	"github.com/kongsakchai/slogja"
+	"github.com/kongsakchai/paint"
 )
 
 func newSlogText(fields ...slog.Attr) *slog.Logger {
@@ -12,7 +12,7 @@ func newSlogText(fields ...slog.Attr) *slog.Logger {
 }
 
 func newCustomSlogText(fields ...slog.Attr) *slog.Logger {
-	return slog.New(slogja.NewTextHandler(io.Discard, &slogja.HandlerOptions{Level: slog.LevelInfo}).WithAttrs(fields))
+	return slog.New(paint.NewTextHandler(io.Discard, &paint.HandlerOptions{Level: slog.LevelInfo}).WithAttrs(fields))
 }
 
 func newDisabledSlogText(fields ...slog.Attr) *slog.Logger {
@@ -20,7 +20,7 @@ func newDisabledSlogText(fields ...slog.Attr) *slog.Logger {
 }
 
 func newDisabledCustomSlogText(fields ...slog.Attr) *slog.Logger {
-	return slog.New(slogja.NewTextHandler(io.Discard, &slogja.HandlerOptions{Level: slog.LevelError}).WithAttrs(fields))
+	return slog.New(paint.NewTextHandler(io.Discard, &paint.HandlerOptions{Level: slog.LevelError}).WithAttrs(fields))
 }
 
 func fakeSlogFields() []slog.Attr {

@@ -1,4 +1,4 @@
-package slogja
+package paint
 
 import "sync"
 

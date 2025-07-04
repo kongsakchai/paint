@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/kongsakchai/slogja"
+	"github.com/kongsakchai/paint"
 )
 
 type address struct {
@@ -46,9 +46,9 @@ func main() {
 
 	print(d)
 
-	l := slog.New(slogja.NewTextHandler(
+	l := slog.New(paint.NewTextHandler(
 		os.Stdout,
-		&slogja.HandlerOptions{
+		&paint.HandlerOptions{
 			Level:      slog.LevelDebug,
 			TimeFormat: "2006-01-02 15:04:05",
 		},
