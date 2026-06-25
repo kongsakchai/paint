@@ -21,9 +21,9 @@ type HandlerOptions struct {
 }
 
 type textHandler struct {
-	opts       HandlerOptions
-	attrPrefix []byte
-	groups     []string
+	opts        HandlerOptions
+	attrPostfix []byte
+	groups      []string
 
 	mu sync.Mutex
 	w  io.Writer
@@ -51,16 +51,22 @@ func (h *textHandler) Enabled(ctx context.Context, level slog.Level) bool {
 }
 
 func (h *textHandler) WithAttrs(attrs []slog.Attr) slog.Handler {
-	buf := newBuffer()
+	var buf *buffer
+	if h.attrPostfix == nil {
+		buf = newBuffer()
+	} else {
+		buf = (*buffer)(&h.attrPostfix)
+	}
+
 	for _, a := range attrs {
 		h.en.writeAttr(buf, h.groups, a)
 	}
 	return &textHandler{
-		opts:       h.opts,
-		w:          h.w,
-		groups:     h.groups,
-		en:         h.en,
-		attrPrefix: *buf,
+		opts:        h.opts,
+		w:           h.w,
+		groups:      h.groups,
+		en:          h.en,
+		attrPostfix: *buf,
 	}
 }
 
@@ -72,11 +78,11 @@ func (h *textHandler) WithGroup(name string) slog.Handler {
 	gs[len(gs)-1] = name
 
 	return &textHandler{
-		opts:       h.opts,
-		w:          h.w,
-		attrPrefix: h.attrPrefix,
-		en:         h.en,
-		groups:     gs,
+		opts:        h.opts,
+		w:           h.w,
+		attrPostfix: h.attrPostfix,
+		en:          h.en,
+		groups:      gs,
 	}
 }
 
@@ -96,11 +102,6 @@ func (h *textHandler) Handle(ctx context.Context, r slog.Record) error {
 	// Write Message
 	h.en.writeMessage(buf, r.Message)
 
-	// Wrote attrPrefix
-	if prefix := h.attrPrefix; len(prefix) > 0 {
-		buf.Write(h.attrPrefix)
-	}
-
 	// Write Attributes
 	if r.NumAttrs() > 0 {
 		r.Attrs(func(a slog.Attr) bool {
@@ -111,6 +112,11 @@ func (h *textHandler) Handle(ctx context.Context, r slog.Record) error {
 			h.en.writeAttr(buf, h.groups, a)
 			return true
 		})
+	}
+
+	// Wrote attrPostfix
+	if len(h.attrPostfix) > 0 {
+		buf.Write(h.attrPostfix)
 	}
 
 	h.en.writeNewline(buf)

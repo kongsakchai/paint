@@ -18,8 +18,8 @@ func BenchmarkTextDisabledWithoutFields(b *testing.B) {
 			}
 		})
 	})
-	b.Run("custom slog text", func(b *testing.B) {
-		logger := newDisabledCustomSlogText()
+	b.Run("paint slog text", func(b *testing.B) {
+		logger := newDisabledPaintSlogText()
 		b.ResetTimer()
 		b.RunParallel(func(pb *testing.PB) {
 			for pb.Next() {
@@ -36,8 +36,8 @@ func BenchmarkTextDisabledWithoutFields(b *testing.B) {
 			}
 		})
 	})
-	b.Run("custom slog.LogAttrs text", func(b *testing.B) {
-		logger := newDisabledCustomSlogText()
+	b.Run("paint slog.LogAttrs text", func(b *testing.B) {
+		logger := newDisabledPaintSlogText()
 		b.ResetTimer()
 		b.RunParallel(func(pb *testing.PB) {
 			for pb.Next() {
@@ -60,8 +60,8 @@ func BenchmarkTextDisabledAccumulatedContext(b *testing.B) {
 			}
 		})
 	})
-	b.Run("custom slog text", func(b *testing.B) {
-		logger := newDisabledCustomSlogText(fakeSlogFields()...)
+	b.Run("paint slog text", func(b *testing.B) {
+		logger := newDisabledPaintSlogText(fakeSlogFields()...)
 		b.ResetTimer()
 		b.RunParallel(func(pb *testing.PB) {
 			for pb.Next() {
@@ -78,8 +78,8 @@ func BenchmarkTextDisabledAccumulatedContext(b *testing.B) {
 			}
 		})
 	})
-	b.Run("custom slog.LogAttrs", func(b *testing.B) {
-		logger := newDisabledCustomSlogText(fakeSlogFields()...)
+	b.Run("paint slog.LogAttrs", func(b *testing.B) {
+		logger := newDisabledPaintSlogText(fakeSlogFields()...)
 		b.ResetTimer()
 		b.RunParallel(func(pb *testing.PB) {
 			for pb.Next() {
@@ -102,8 +102,8 @@ func BenchmarkTextDisabledAddingFields(b *testing.B) {
 			}
 		})
 	})
-	b.Run("custom slog", func(b *testing.B) {
-		logger := newDisabledCustomSlogText()
+	b.Run("paint slog", func(b *testing.B) {
+		logger := newDisabledPaintSlogText()
 		b.ResetTimer()
 		b.RunParallel(func(pb *testing.PB) {
 			for pb.Next() {
@@ -120,8 +120,8 @@ func BenchmarkTextDisabledAddingFields(b *testing.B) {
 			}
 		})
 	})
-	b.Run("custom slog.LogAttrs", func(b *testing.B) {
-		logger := newDisabledCustomSlogText()
+	b.Run("paint slog.LogAttrs", func(b *testing.B) {
+		logger := newDisabledPaintSlogText()
 		b.ResetTimer()
 		b.RunParallel(func(pb *testing.PB) {
 			for pb.Next() {
@@ -144,8 +144,8 @@ func BenchmarkTextWithoutFields(b *testing.B) {
 			}
 		})
 	})
-	b.Run("custom slog", func(b *testing.B) {
-		logger := newCustomSlogText()
+	b.Run("paint slog", func(b *testing.B) {
+		logger := newPaintSlogText()
 		b.ResetTimer()
 		b.RunParallel(func(pb *testing.PB) {
 			for pb.Next() {
@@ -162,8 +162,8 @@ func BenchmarkTextWithoutFields(b *testing.B) {
 			}
 		})
 	})
-	b.Run("custom slog.LogAttrs", func(b *testing.B) {
-		logger := newCustomSlogText()
+	b.Run("paint slog.LogAttrs", func(b *testing.B) {
+		logger := newPaintSlogText()
 		b.ResetTimer()
 		b.RunParallel(func(pb *testing.PB) {
 			for pb.Next() {
@@ -186,8 +186,8 @@ func BenchmarkTextAccumulatedContext(b *testing.B) {
 			}
 		})
 	})
-	b.Run("custom slog", func(b *testing.B) {
-		logger := newCustomSlogText(fakeSlogFields()...)
+	b.Run("paint slog", func(b *testing.B) {
+		logger := newPaintSlogText(fakeSlogFields()...)
 		b.ResetTimer()
 		b.RunParallel(func(pb *testing.PB) {
 			for pb.Next() {
@@ -204,8 +204,8 @@ func BenchmarkTextAccumulatedContext(b *testing.B) {
 			}
 		})
 	})
-	b.Run("custom slog.LogAttrs", func(b *testing.B) {
-		logger := newCustomSlogText(fakeSlogFields()...)
+	b.Run("paint slog.LogAttrs", func(b *testing.B) {
+		logger := newPaintSlogText(fakeSlogFields()...)
 		b.ResetTimer()
 		b.RunParallel(func(pb *testing.PB) {
 			for pb.Next() {
@@ -228,8 +228,8 @@ func BenchmarkAddingFields(b *testing.B) {
 			}
 		})
 	})
-	b.Run("custom slog", func(b *testing.B) {
-		logger := newCustomSlogText()
+	b.Run("paint slog", func(b *testing.B) {
+		logger := newPaintSlogText()
 		b.ResetTimer()
 		b.RunParallel(func(pb *testing.PB) {
 			for pb.Next() {
@@ -246,8 +246,8 @@ func BenchmarkAddingFields(b *testing.B) {
 			}
 		})
 	})
-	b.Run("custom slog.LogAttrs", func(b *testing.B) {
-		logger := newCustomSlogText()
+	b.Run("paint slog.LogAttrs", func(b *testing.B) {
+		logger := newPaintSlogText()
 		b.ResetTimer()
 		b.RunParallel(func(pb *testing.PB) {
 			for pb.Next() {

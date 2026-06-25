@@ -11,7 +11,7 @@ func newSlogText(fields ...slog.Attr) *slog.Logger {
 	return slog.New(slog.NewTextHandler(io.Discard, &slog.HandlerOptions{Level: slog.LevelInfo}).WithAttrs(fields))
 }
 
-func newCustomSlogText(fields ...slog.Attr) *slog.Logger {
+func newPaintSlogText(fields ...slog.Attr) *slog.Logger {
 	return slog.New(paint.NewTextHandler(io.Discard, &paint.HandlerOptions{Level: slog.LevelInfo}).WithAttrs(fields))
 }
 
@@ -19,7 +19,7 @@ func newDisabledSlogText(fields ...slog.Attr) *slog.Logger {
 	return slog.New(slog.NewTextHandler(io.Discard, &slog.HandlerOptions{Level: slog.LevelError}).WithAttrs(fields))
 }
 
-func newDisabledCustomSlogText(fields ...slog.Attr) *slog.Logger {
+func newDisabledPaintSlogText(fields ...slog.Attr) *slog.Logger {
 	return slog.New(paint.NewTextHandler(io.Discard, &paint.HandlerOptions{Level: slog.LevelError}).WithAttrs(fields))
 }
 

@@ -74,7 +74,7 @@ func TestHandler(t *testing.T) {
 			return a
 		},
 	})
-	h.attrPrefix = []byte("prefix=\"prefix-data\"")
+	h.attrPostfix = []byte("prefix=\"prefix-data\"")
 
 	rec := slog.NewRecord(
 		time.Date(2023, 10, 1, 12, 0, 0, 0, time.UTC),

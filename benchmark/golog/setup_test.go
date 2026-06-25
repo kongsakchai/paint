@@ -97,7 +97,7 @@ var (
 
 var loggers = []logBenchmark{
 	&slogTextBench{},
-	&customSlogTextBench{},
+	&paintSlogTextBench{},
 }
 
 type blackhole struct {

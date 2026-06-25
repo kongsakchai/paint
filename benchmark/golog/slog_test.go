@@ -81,19 +81,19 @@ func (b *slogBench) logDisabledCtxWeak(msg string) {
 	b.l.Debug(msg, alternatingKeyValuePairs()...)
 }
 
-func newCutomSlogText(w io.Writer) *slog.Logger {
+func newPaintSlogText(w io.Writer) *slog.Logger {
 	return slog.New(paint.NewTextHandler(w, &paint.HandlerOptions{
 		Level: slog.LevelInfo,
 	}))
 }
 
-func newCutomSlogTextWithCtx(w io.Writer, attr []slog.Attr) *slog.Logger {
+func newPaintSlogTextWithCtx(w io.Writer, attr []slog.Attr) *slog.Logger {
 	return slog.New(paint.NewTextHandler(w, &paint.HandlerOptions{
 		Level: slog.LevelInfo,
 	}).WithAttrs(attr))
 }
 
-// customSlogTextBench is a benchmark for the custom slog logger
+// paintSlogTextBench is a benchmark for the paint slog logger
 
 type slogTextBench struct {
 	*slogBench
@@ -119,26 +119,26 @@ func (b *slogTextBench) name() string {
 	return "Slog Text"
 }
 
-type customSlogTextBench struct {
+type paintSlogTextBench struct {
 	*slogBench
 }
 
-func (b *customSlogTextBench) new(w io.Writer) logBenchmark {
-	return &customSlogTextBench{
+func (b *paintSlogTextBench) new(w io.Writer) logBenchmark {
+	return &paintSlogTextBench{
 		&slogBench{
-			l: newCutomSlogText(w),
+			l: newPaintSlogText(w),
 		},
 	}
 }
 
-func (b *customSlogTextBench) newWithCtx(w io.Writer) logBenchmark {
-	return &customSlogTextBench{
+func (b *paintSlogTextBench) newWithCtx(w io.Writer) logBenchmark {
+	return &paintSlogTextBench{
 		&slogBench{
-			l: newCutomSlogTextWithCtx(w, slogAttrs()),
+			l: newPaintSlogTextWithCtx(w, slogAttrs()),
 		},
 	}
 }
 
-func (b *customSlogTextBench) name() string {
-	return "Custom Slog Text"
+func (b *paintSlogTextBench) name() string {
+	return "Paint Slog Text"
 }

@@ -9,7 +9,7 @@ type buffer []byte
 var bufPool = sync.Pool{
 	New: func() interface{} {
 		b := make(buffer, 0, 1024)
-		return (*buffer)(&b)
+		return &b
 	},
 }
 

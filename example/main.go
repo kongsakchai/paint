@@ -63,7 +63,8 @@ func print(l *slog.Logger) {
 	l.Warn("Warning message", slog.String("key", "value"))
 	l.Error("Error message", slog.String("key", "value"))
 
-	lw := l.With(slog.String("pre", "attributes"))
+	lw := l.With(slog.String("post", "attributes"))
+	lw = lw.With(slog.String("post-2", "attributes"))
 	lw.Info("Info message with pre attributes", slog.String("key", "value"))
 
 	lg := l.WithGroup("group")
