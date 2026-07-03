@@ -9,24 +9,44 @@ import (
 )
 
 const (
-	txtGray    = "\033[90m"
-	txtRed     = "\033[31m"
-	txtGreen   = "\033[32m"
-	txtYellow  = "\033[33m"
-	txtBlue    = "\033[34m"
-	txtMagenta = "\033[35m"
-	txtCyan    = "\033[36m"
-	txtWhite   = "\033[37m"
+	txtGray   = "\033[90m"
+	txtRed    = "\033[31m"
+	txtGreen  = "\033[32m"
+	txtYellow = "\033[33m"
+	txtCyan   = "\033[36m"
+	txtWhite  = "\033[37m"
 
-	txtBold  = "\033[1m"
 	txtReset = "\033[0m"
 )
+
+var levelLebel = map[slog.Level]string{
+	slog.LevelError: "ERR ",
+	slog.LevelWarn:  "WRN ",
+	slog.LevelInfo:  "INF ",
+	slog.LevelDebug: "DBG ",
+}
 
 type encodeText struct {
 	opt HandlerOptions
 }
 
 func newEncodeText(opt HandlerOptions) *encodeText {
+	if len(opt.LevelPrefix) == 0 {
+		opt.LevelPrefix = map[slog.Level]string{
+			slog.LevelError: "❌ ",
+			slog.LevelWarn:  "⚠️  ",
+			slog.LevelInfo:  "🟢 ",
+			slog.LevelDebug: "📄 ",
+		}
+	}
+	if len(opt.LevelColor) == 0 {
+		opt.LevelColor = map[slog.Level]string{
+			slog.LevelError: txtRed,
+			slog.LevelWarn:  txtYellow,
+			slog.LevelInfo:  txtGreen,
+		}
+	}
+
 	return &encodeText{
 		opt: opt,
 	}
@@ -46,20 +66,13 @@ func (e *encodeText) reset(buf *buffer) {
 	buf.WriteString(txtReset)
 }
 
-func (e *encodeText) writeEmojiLevel(buf *buffer, level slog.Level) {
-	if e.opt.DisableEmoji {
+func (e *encodeText) writeLevelPrefix(buf *buffer, level slog.Level) {
+	if e.opt.DisableLevelPrefix {
 		return
 	}
 
-	switch level {
-	case slog.LevelError:
-		buf.WriteString("❌ ")
-	case slog.LevelWarn:
-		buf.WriteString("⚠️  ")
-	case slog.LevelInfo:
-		buf.WriteString("🌱 ")
-	case slog.LevelDebug:
-		buf.WriteString("🐛 ")
+	if prefix, ok := e.opt.LevelPrefix[level]; ok {
+		buf.WriteString(prefix)
 	}
 }
 
@@ -79,29 +92,19 @@ func (e *encodeText) writeLevel(buf *buffer, level slog.Level) {
 		return
 	}
 
-	switch level {
-	case slog.LevelError:
-		e.style(buf, txtRed)
-		buf.WriteString("ERR ")
+	color, colorOk := e.opt.LevelColor[level]
+	if colorOk || e.opt.DisableColor {
+		e.style(buf, color)
+	}
+	buf.WriteString(levelLebel[level])
+	if colorOk || e.opt.DisableColor {
 		e.reset(buf)
-	case slog.LevelWarn:
-		e.style(buf, txtYellow)
-		buf.WriteString("WRN ")
-		e.reset(buf)
-	case slog.LevelInfo:
-		e.style(buf, txtGreen)
-		buf.WriteString("INF ")
-		e.reset(buf)
-	case slog.LevelDebug:
-		buf.WriteString("DBG ")
 	}
 
 }
 
 func (e *encodeText) writeMessage(buf *buffer, str string) {
-	e.style(buf, txtBold)
 	e.writeString(buf, str)
-	e.reset(buf)
 	e.writeSpace(buf)
 }
 

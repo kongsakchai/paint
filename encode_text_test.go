@@ -63,65 +63,65 @@ func TestEncodeStyle(t *testing.T) {
 
 func TestEncodeEmojiLevel(t *testing.T) {
 	t.Run("should write emoji ❌ when error level", func(t *testing.T) {
-		opt := HandlerOptions{DisableEmoji: false}
+		opt := HandlerOptions{}
 		encoder := newEncodeText(opt)
 		buf := newBuffer()
 		defer buf.Free()
 
 		// Test emoji for error level
-		encoder.writeEmojiLevel(buf, slog.LevelError)
+		encoder.writeLevelPrefix(buf, slog.LevelError)
 		if string(*buf) != "❌ " {
 			t.Errorf("Expected buffer to contain '❌ ', got '%s'", string(*buf))
 		}
 	})
 
 	t.Run("should write emoji ⚠️ when warn level", func(t *testing.T) {
-		opt := HandlerOptions{DisableEmoji: false}
+		opt := HandlerOptions{}
 		encoder := newEncodeText(opt)
 		buf := newBuffer()
 		defer buf.Free()
 
 		// Test emoji for warn level
-		encoder.writeEmojiLevel(buf, slog.LevelWarn)
+		encoder.writeLevelPrefix(buf, slog.LevelWarn)
 		if string(*buf) != "⚠️  " {
 			t.Errorf("Expected buffer to contain '⚠️  ', got '%s'", string(*buf))
 		}
 	})
 
-	t.Run("should write emoji 🌱 when info level", func(t *testing.T) {
-		opt := HandlerOptions{DisableEmoji: false}
+	t.Run("should write emoji 🟢 when info level", func(t *testing.T) {
+		opt := HandlerOptions{}
 		encoder := newEncodeText(opt)
 		buf := newBuffer()
 		defer buf.Free()
 
 		// Test emoji for info level
-		encoder.writeEmojiLevel(buf, slog.LevelInfo)
-		if string(*buf) != "🌱 " {
-			t.Errorf("Expected buffer to contain '🌱 ', got '%s'", string(*buf))
+		encoder.writeLevelPrefix(buf, slog.LevelInfo)
+		if string(*buf) != "🟢 " {
+			t.Errorf("Expected buffer to contain '🟢 ', got '%s'", string(*buf))
 		}
 	})
 
-	t.Run("should write emoji 🐛 when debug level", func(t *testing.T) {
-		opt := HandlerOptions{DisableEmoji: false}
+	t.Run("should write emoji 📄 when debug level", func(t *testing.T) {
+		opt := HandlerOptions{}
 		encoder := newEncodeText(opt)
 		buf := newBuffer()
 		defer buf.Free()
 
 		// Test emoji for debug level
-		encoder.writeEmojiLevel(buf, slog.LevelDebug)
-		if string(*buf) != "🐛 " {
-			t.Errorf("Expected buffer to contain '🐛 ', got '%s'", string(*buf))
+		encoder.writeLevelPrefix(buf, slog.LevelDebug)
+		if string(*buf) != "📄 " {
+			t.Errorf("Expected buffer to contain '📄 ', got '%s'", string(*buf))
 		}
 	})
 
 	t.Run("should not write emoji when disableEmoji is true", func(t *testing.T) {
-		opt := HandlerOptions{DisableEmoji: true}
+		opt := HandlerOptions{DisableLevelPrefix: true}
 		encoder := newEncodeText(opt)
 		buf := newBuffer()
 		defer buf.Free()
 
 		// Test emoji with disableEmoji
-		encoder.writeEmojiLevel(buf, slog.LevelError)
+		encoder.writeLevelPrefix(buf, slog.LevelError)
 		if string(*buf) != "" {
 			t.Errorf("Expected buffer to be empty when disableEmoji is true, got '%s'", string(*buf))
 		}
@@ -239,7 +239,7 @@ func TestEncodeMessage(t *testing.T) {
 	// Test writing message
 	testMessage := "This is a test message"
 	encoder.writeMessage(buf, testMessage)
-	expected := txtBold + "\"" + testMessage + "\"" + txtReset + " "
+	expected := "\"This is a test message\" "
 	if string(*buf) != expected {
 		t.Errorf("Expected buffer to contain '%s', got '%s'", expected, string(*buf))
 	}

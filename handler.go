@@ -11,13 +11,15 @@ import (
 type replaceAttrFunc func(groups []string, a slog.Attr) slog.Attr
 
 type HandlerOptions struct {
-	Level        slog.Level
-	ReplaceAttr  replaceAttrFunc
-	TimeFormat   string
-	DisableColor bool
-	DisableEmoji bool
-	DisableTime  bool
-	DisableLevel bool
+	Level              slog.Level
+	ReplaceAttr        replaceAttrFunc
+	LevelPrefix        map[slog.Level]string
+	LevelColor         map[slog.Level]string
+	TimeFormat         string
+	DisableColor       bool
+	DisableLevelPrefix bool
+	DisableTime        bool
+	DisableLevel       bool
 }
 
 type textHandler struct {
@@ -90,8 +92,8 @@ func (h *textHandler) Handle(ctx context.Context, r slog.Record) error {
 	buf := newBuffer()
 	defer buf.Free()
 
-	// Write Emoji Level
-	h.en.writeEmojiLevel(buf, r.Level)
+	// Write Level Prefix
+	h.en.writeLevelPrefix(buf, r.Level)
 
 	// Write Time
 	h.en.writeTime(buf, r.Time)

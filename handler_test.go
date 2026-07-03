@@ -27,10 +27,13 @@ func TestWithAttrs(t *testing.T) {
 
 	attrs := []slog.Attr{
 		slog.String("key1", "value1"),
-		slog.Int("key2", 42),
+	}
+	attrs2 := []slog.Attr{
+		slog.String("key2", "value2"),
 	}
 
 	newHandler := h.WithAttrs(attrs)
+	newHandler = newHandler.WithAttrs(attrs2)
 
 	if len(newHandler.(*textHandler).groups) != 0 {
 		t.Error("Expected groups to be empty in new handler")
