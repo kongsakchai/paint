@@ -26,24 +26,44 @@ var levelLebel = map[slog.Level]string{
 	slog.LevelDebug: "DBG ",
 }
 
+var levelPrefix = map[slog.Level]string{
+	slog.LevelError: "🔴 ",
+	slog.LevelWarn:  "🟡 ",
+	slog.LevelInfo:  "🟢 ",
+	slog.LevelDebug: "⚪️ ",
+}
+
+var levelColor = map[slog.Level]string{
+	slog.LevelError: txtRed,
+	slog.LevelWarn:  txtYellow,
+	slog.LevelInfo:  txtGreen,
+}
+
 type encodeText struct {
 	opt HandlerOptions
 }
 
 func newEncodeText(opt HandlerOptions) *encodeText {
-	if len(opt.LevelPrefix) == 0 {
-		opt.LevelPrefix = map[slog.Level]string{
-			slog.LevelError: "❌ ",
-			slog.LevelWarn:  "⚠️  ",
-			slog.LevelInfo:  "🟢 ",
-			slog.LevelDebug: "📄 ",
+	if len(opt.LevelPrefix) < 4 {
+		if opt.LevelPrefix == nil {
+			opt.LevelPrefix = levelPrefix
+		} else {
+			for level, prefix := range levelPrefix {
+				if _, ok := opt.LevelPrefix[level]; !ok {
+					opt.LevelPrefix[level] = prefix
+				}
+			}
 		}
 	}
-	if len(opt.LevelColor) == 0 {
-		opt.LevelColor = map[slog.Level]string{
-			slog.LevelError: txtRed,
-			slog.LevelWarn:  txtYellow,
-			slog.LevelInfo:  txtGreen,
+	if len(opt.LevelColor) < 4 {
+		if opt.LevelColor == nil {
+			opt.LevelColor = levelColor
+		} else {
+			for level, color := range levelColor {
+				if _, ok := opt.LevelColor[level]; !ok {
+					opt.LevelColor[level] = color
+				}
+			}
 		}
 	}
 

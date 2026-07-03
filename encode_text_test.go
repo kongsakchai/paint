@@ -20,6 +20,27 @@ func (d Data) String() string {
 	return d.Value
 }
 
+func TestNewEncode(t *testing.T) {
+	t.Run("should return encode with mix level color and level prefix", func(t *testing.T) {
+		opt := HandlerOptions{
+			LevelPrefix: map[slog.Level]string{
+				slog.LevelError: "error",
+			},
+			LevelColor: map[slog.Level]string{
+				slog.LevelError: "error",
+			},
+		}
+		encoder := newEncodeText(opt)
+
+		if len(encoder.opt.LevelPrefix) != 4 {
+			t.Errorf("Expected LevelPrefix with default is '%d', got '%d'", 4, len(encoder.opt.LevelPrefix))
+		}
+		if len(encoder.opt.LevelColor) < 3 {
+			t.Errorf("Expected LevelColor with default at least '%d', got '%d'", 3, len(encoder.opt.LevelColor))
+		}
+	})
+}
+
 func TestEncodeStyle(t *testing.T) {
 	t.Run("should return style when disableColo is false", func(t *testing.T) {
 		opt := HandlerOptions{DisableColor: false}
@@ -62,7 +83,7 @@ func TestEncodeStyle(t *testing.T) {
 }
 
 func TestEncodeEmojiLevel(t *testing.T) {
-	t.Run("should write emoji ❌ when error level", func(t *testing.T) {
+	t.Run("should write emoji 🔴 when error level", func(t *testing.T) {
 		opt := HandlerOptions{}
 		encoder := newEncodeText(opt)
 		buf := newBuffer()
@@ -70,12 +91,12 @@ func TestEncodeEmojiLevel(t *testing.T) {
 
 		// Test emoji for error level
 		encoder.writeLevelPrefix(buf, slog.LevelError)
-		if string(*buf) != "❌ " {
-			t.Errorf("Expected buffer to contain '❌ ', got '%s'", string(*buf))
+		if string(*buf) != "🔴 " {
+			t.Errorf("Expected buffer to contain '🔴 ', got '%s'", string(*buf))
 		}
 	})
 
-	t.Run("should write emoji ⚠️ when warn level", func(t *testing.T) {
+	t.Run("should write emoji 🟡 when warn level", func(t *testing.T) {
 		opt := HandlerOptions{}
 		encoder := newEncodeText(opt)
 		buf := newBuffer()
@@ -83,8 +104,8 @@ func TestEncodeEmojiLevel(t *testing.T) {
 
 		// Test emoji for warn level
 		encoder.writeLevelPrefix(buf, slog.LevelWarn)
-		if string(*buf) != "⚠️  " {
-			t.Errorf("Expected buffer to contain '⚠️  ', got '%s'", string(*buf))
+		if string(*buf) != "🟡 " {
+			t.Errorf("Expected buffer to contain '🟡 ', got '%s'", string(*buf))
 		}
 	})
 
@@ -101,7 +122,7 @@ func TestEncodeEmojiLevel(t *testing.T) {
 		}
 	})
 
-	t.Run("should write emoji 📄 when debug level", func(t *testing.T) {
+	t.Run("should write emoji ⚪️ when debug level", func(t *testing.T) {
 		opt := HandlerOptions{}
 		encoder := newEncodeText(opt)
 		buf := newBuffer()
@@ -109,8 +130,8 @@ func TestEncodeEmojiLevel(t *testing.T) {
 
 		// Test emoji for debug level
 		encoder.writeLevelPrefix(buf, slog.LevelDebug)
-		if string(*buf) != "📄 " {
-			t.Errorf("Expected buffer to contain '📄 ', got '%s'", string(*buf))
+		if string(*buf) != "⚪️ " {
+			t.Errorf("Expected buffer to contain '⚪️ ', got '%s'", string(*buf))
 		}
 	})
 
